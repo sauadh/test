@@ -1,0 +1,110 @@
+№ | Проверка | Обязательна
+1 | Идентификатор: NO, SO, WE, EA | 
+2 | Есть путь после идентификатора | 
+3 | Нет лишних аргументов | 
+4 | Уникальность: нет дубликатов | 
+5 | Все 4 текстуры должны быть | 
+6 | Пропуск пустых строк | 
+7 | Любой порядок | 
+8 | Завершение после карты или цветов | 
+
+
+bool valid_content(char **file_content, t_main_data *main_data)
+{
+    if (!init_data(main_data))
+        return (false);
+    
+    if (!validate_textures(file_content, main_data))
+        return (false);
+
+    if (!validate_colors(file_content, main_data))
+        return (false);
+
+    if (!validate_map(file_content, main_data))
+        return (false);
+
+    return (true);
+}
+
+я сейчас только с текстурами работаю помнишь? мне нужно добавить  проверку на расширение .xpm
+
+Добавить проверку, что путь не пустой
+
+Добавить проверку, что путь реально открывается через open
+
+
+
+
+bool validate_textures(char **file_content, t_main_data *main_data)
+{
+    int i;
+    i = 0;
+    char **splitted;
+    while(file_content[i] != NULL)
+    {
+            // if (!ft_strncmp(file_content[i], "NO", 2) ||
+            //     !ft_strncmp(file_content[i], "SO", 2) ||
+            //     !ft_strncmp(file_content[i], "WE", 2) ||
+            //     !ft_strncmp(file_content[i], "EA", 2))
+            if(get_index(file_content[i]) != -1)
+            {
+                splitted = ft_split(file_content[i], ' ');
+                if (!splitted || !splitted[0] || !splitted[1] || splitted[2] ||
+                    !set_path(splitted, main_data))
+                return(free_split(splitted), false);
+                free_split(splitted);
+            }
+            i++;   
+    }
+        i = 0;
+        while(i < 4)
+            if(main_data->textures[i++].path == NULL)
+                return (false);
+        return(true);
+}
+
+
+char *set_color_value(char *line, int *value, bool expect_comma)
+{
+    if (!ft_isdigit(*line))
+    {
+        printf("[set_color_value] Error: Expected digit\n");
+        return NULL;
+    }
+
+    *value = ft_atoi(line);
+    if (*value < 0 || *value > 255)
+    {
+        printf("[set_color_value] Error: Value should be in [0,255], got %d\n", *value);
+        return NULL;
+    }
+
+    line = skip_digits(line);
+    line = skip_tab_spaces(line);
+
+    if (expect_comma)
+    {
+        if (*line != ',')
+        {
+            printf("[set_color_value] Error: Expected comma after value\n");
+            return NULL;
+        }
+        line++; // пропускаем запятую
+        return skip_tab_spaces(line);
+    }
+    else
+    {
+        // Последнее значение: нельзя допускать запятую
+        if (*line == ',')
+        {
+            printf("[set_color_value] Error: Unexpected comma after last value\n");
+            return NULL;
+        }
+        return skip_tab_spaces(line);
+    }
+}
+
+N 1
+E 1
+W -1
+S -1
