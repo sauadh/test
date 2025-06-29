@@ -8,6 +8,7 @@
 
 # define MOVE_SPEED 0.08
 # define ROT_SPEED	0.05
+#define COLLISION_RADIUS 0.2
 
 # define DIM 64
 
@@ -19,22 +20,22 @@
 # define PRL	"\033[0;35m"
 
 //Mac_OS
-// # define W_KEY 13
-// # define A_KEY 0
-// # define S_KEY 1
-// # define D_KEY 2
-// # define ESC_KEY 53
-// # define L_ARROW 123
-// # define R_ARROW 124
+# define W_KEY 13
+# define A_KEY 0
+# define S_KEY 1
+# define D_KEY 2
+# define ESC_KEY 53
+# define L_ARROW 123
+# define R_ARROW 124
 
 // Linux
-# define W_KEY 119
-# define A_KEY 97
-# define S_KEY 115
-# define D_KEY 100
-# define ESC_KEY 65307
-# define L_ARROW 65361
-# define R_ARROW 65363
+// # define W_KEY 119
+// # define A_KEY 97
+// # define S_KEY 115
+// # define D_KEY 100
+// # define ESC_KEY 65307
+// # define L_ARROW 65361
+// # define R_ARROW 65363
 
 # ifndef M_PI
 #  define M_PI 3.14159265358979323846
@@ -58,12 +59,6 @@ typedef struct s_point
 	int	y;
 }	t_point;
 
-// typedef enum e_map_digit{
-//     ZERO = 0, 
-//     ONE,
-//     PLAYER , 
-//     SPACE
-// } t_map_digit;
 
 typedef struct s_texture
 {
@@ -159,17 +154,8 @@ typedef struct s_main_data
 	t_bool		rot_left;
 	int    screen_height;
 	int    screen_width;
-    // t_map_digit **map;
-	int n_player;//check with diana
-    t_image	n_xpm;
-	t_image	e_xpm;
-	t_image	w_xpm;
-	t_image	s_xpm;
     char	**maplines;
 	int		map_height;
 	int		map_width;
     t_player    player;//change in parsing 
-    float   direction;  
-
-    
 } t_main_data;

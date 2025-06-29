@@ -18,8 +18,8 @@ FLAGS = -Wall -Wextra -Werror -O3 -g #-fsanitize=address
 
 LIBFT:= libft/libft.a
 
-#MLX = mlx/libmlx.a
-MLX = mlx_linux/libmlx_Linux.a
+MLX = mlx/libmlx.a
+#MLX = mlx_linux/libmlx_Linux.a
 
 
 LIBS :=
@@ -45,10 +45,8 @@ $(LIBFT):
 	@ make -C libft/ >/dev/null
 
 $(MLX):
-	@ make -C mlx_linux/ >/dev/null
-
-#@ make -C mlx/ >/dev/null
-
+	@ make -C mlx/ >/dev/null
+#@ make -C mlx_linux/ >/dev/null
 clean: 
 	@ $(RM) $(OBJ)
 	@ make -C libft/ clean >/dev/null

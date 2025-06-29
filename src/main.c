@@ -21,7 +21,6 @@ int main(int ac, char **av)
 {
     t_main_data main_data;
     char **file_content;
-    (void) av;
     file_content = NULL;
     if(ac != 2)
         exit_program("Error: need the path for map file", NULL);
@@ -37,13 +36,14 @@ int main(int ac, char **av)
     printf(">>> Stage 4: validating content\n");
     if(!valid_content(file_content, &main_data))
          exit_program("Error: invalid content\n", NULL);
-    // if (!valid_content(file_content, &main_data))
-    // {
-    //     printf("hlo1");
-    //     // clean(file_content);
-    //     // clean_main_data(&main_data);
-    //     //exit_program("Error: invalid content\n", NULL);
-    // }
+    // // if (!valid_content(file_content, &main_data))
+    // // {
+    // //     printf("hlo1");
+    // //     // clean(file_content);
+    // //     // clean_main_data(&main_data);
+    // //     //exit_program("Error: invalid content\n", NULL);
+    // // }
+    clean(file_content);
     main_data.img.image = mlx_new_image(main_data.mlx,
 			main_data.screen_width, main_data.screen_height);
 	if (main_data.img.image == NULL)
@@ -55,12 +55,11 @@ int main(int ac, char **av)
 	if (main_data.img.buff== NULL)
 		return (printf("Error\nCouldn't allocate img pxl ptr\n"), 1);
     init_dir(&main_data);
-    // clean(file_content);
-    // clean_main_data(&main_data);
     mlx_hook(main_data.win, 2, 1L << 0, key_press_handler, &main_data);
 	mlx_hook(main_data.win, 3, 1L << 1, key_release_handler, &main_data);
     mlx_hook(main_data.win, 17, 0, ft_destroy, &main_data);
     mlx_loop_hook(main_data.mlx, render, &main_data);
 	mlx_loop(main_data.mlx);
+    ft_destroy(&main_data);
     return(1);
 }

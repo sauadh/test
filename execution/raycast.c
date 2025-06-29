@@ -46,11 +46,6 @@ static void	set_side_dist(double posx, double posy, t_ray *ray)
 
 static void do_ray(t_main_data *main_data, t_ray *ray)
 {
-	//printf("Before step: map_x=%d, map_y=%d\n", (int)ray->map_x, (int)ray->map_y);
-	// printf("Stepping: sidedist_x=%.3f, sidedist_y=%.3f, deltadist_x=%.3f, deltadist_y=%.3f\n",
-    // ray->sidedist_x, ray->sidedist_y, ray->deltadist_x, ray->deltadist_y);
-
-	// printf("Before step: map_x=%d, map_y=%d\n", (int)ray->map_x, (int)ray->map_y);
     while (!ray->hit)
     {
         if (ray->sidedist_x < ray->sidedist_y)
@@ -65,11 +60,9 @@ static void do_ray(t_main_data *main_data, t_ray *ray)
             ray->map_y += ray->step_y;
             ray->side = 1;
         }
-		//printf("After step: map_x=%d, map_y=%d\n", (int)ray->map_x, (int)ray->map_y);
         int map_x = (int)ray->map_x;
         int map_y = (int)ray->map_y;
 
-        // Check Y bounds
         if (map_y < 0 || map_y >= main_data->map_height)
         {
             printf("Ray map_y out of bounds: %d\n", map_y);
@@ -111,16 +104,13 @@ int	render(void *param)
 
 		init_raycast(main_data, &main_data->player, &ray, x);
 		set_side_dist(main_data->player.pos_x, main_data->player.pos_y, &ray);
-		printf("Before ray_loop call: map_x=%d, map_y=%d\n", (int)ray.map_x, (int)ray.map_y);
 		do_ray(main_data, &ray);
-		printf("After ray_loop call: map_x=%d, map_y=%d\n", (int)ray.map_x, (int)ray.map_y);
-
 		calculate_wall_height(main_data, &ray);
 		set_up_tex_x(main_data, ray, &tex);
-		//draw_bg(main_data, ray, x);
 		draw_v_line(main_data, ray, x, main_data->floor.in_int);
 		draw_v_line(main_data, ray, x, main_data->ceiling.in_int);
 		update_render(main_data, &tex, ray, x);
+
 	}
 	return (draw_gun_sprite(main_data),
 		mlx_put_image_to_window(main_data->mlx, main_data->win,

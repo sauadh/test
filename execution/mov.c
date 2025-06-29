@@ -30,92 +30,74 @@ void	rotate_right(t_main_data *main_data)
 		main_data->player.dir -= 2 * M_PI;
 }
 
-t_bool check_valid_move(t_main_data *data, int key)
+static bool is_valid_tile(t_main_data *main_data, int x, int y)
 {
-	t_point target = { data->player.pos_x, data->player.pos_y };
-	double dir;
-	if (key == W_KEY || key == S_KEY)
+	if (y < 0 || y >= main_data->map_height)
+		return false;
+	if (x < 0 || x >= (int)ft_strlen(main_data->maplines[y]))
+		return false;
+	char tile = main_data->maplines[y][x];
+	return (tile != '1' && tile != ' ');
+}
+
+void try_move(t_main_data *main_data, double dx, double dy)
+{
+	double new_x = main_data->player.pos_x + dx;
+	double new_y = main_data->player.pos_y + dy;
+	int f;
+
+	if (dx > 0)
+		f = 1;
+	else 
+		f = -1;
+	int check_x = (int)(new_x + COLLISION_RADIUS * f);
+	if (dy > 0)
+		f = 1;
+	else 
+		f = -1;
+	int check_y = (int)(new_y + COLLISION_RADIUS * f);
+
+	// Check both axes at once — no sliding
+	if (is_valid_tile(main_data, check_x, check_y))
 	{
-		if (key == W_KEY)
-		 	dir = 1;
-		else
-		  	dir = -1;
-		target.x += data->player.dir_x * MOVE_SPEED * dir;
-		target.y += data->player.dir_y * MOVE_SPEED * dir;
+		main_data->player.pos_x = new_x;
+		main_data->player.pos_y = new_y;
 	}
-	else if (key == A_KEY || key == D_KEY)
-	{
-		if (key == D_KEY)
-		 	dir = 1;
-		else
-		  	dir = -1;
-		target.x += -data->player.dir_y * MOVE_SPEED * dir;
-		target.y +=  data->player.dir_x * MOVE_SPEED * dir;
-	}
-	else
-		return FALSE;
-
-	int tx = (int)target.x;
-	int ty = (int)target.y;
-
-	if (ty < 0 || ty >= data->map_height || !data->maplines[ty])
-		return FALSE;
-
-	size_t len = ft_strlen(data->maplines[ty]);
-	if (tx < 0 || (size_t)tx >= len)
-		return FALSE;
-
-	return data->maplines[ty][tx] != '1';
 }
 
 
-
-
-void	move_player(t_main_data *data, int key, t_bool *move_flag)
+void move_up(t_main_data *main_data)
 {
-	if (*move_flag == FALSE)
-		return;
-
-	double move_x = 0;
-	double move_y = 0;
-
-	if (key == W_KEY || key == S_KEY)
-	{
-		double dir = (key == W_KEY) ? 1 : -1;
-		move_x = data->player.dir_x * MOVE_SPEED * dir;
-		move_y = data->player.dir_y * MOVE_SPEED * dir;
-	}
-	else if (key == A_KEY || key == D_KEY)
-	{
-		double dir = (key == D_KEY) ? 1 : -1;
-		move_x = -data->player.dir_y * MOVE_SPEED * dir;
-		move_y =  data->player.dir_x * MOVE_SPEED * dir;
-	}
-	else
-		return;
-
-	if (check_valid_move(data, key))
-	{
-		data->player.pos_x += move_x;
-		data->player.pos_y += move_y;
-
-		if (data->player.pos_x < 0)
-			data->player.pos_x = 0;
-		if (data->player.pos_y < 0)
-			data->player.pos_y = 0;
-	}
+    if (!main_data->move_up) return;
+    try_move(main_data, main_data->player.dir_x * MOVE_SPEED, main_data->player.dir_y * MOVE_SPEED);
 }
 
-void movement(t_main_data *data)
+void move_down(t_main_data *main_data)
 {
-	move_player(data, W_KEY, &data->move_up);
-	move_player(data, S_KEY, &data->move_down);
-	move_player(data, A_KEY, &data->move_left);
-	move_player(data, D_KEY, &data->move_right);
+    if (!main_data->move_down) return;
+    try_move(main_data, -main_data->player.dir_x * MOVE_SPEED, -main_data->player.dir_y * MOVE_SPEED);
+}
 
-	rotate_left(data);
-	rotate_right(data);
+void move_left(t_main_data *main_data)
+{
+    if (!main_data->move_left) return;
+    try_move(main_data, main_data->player.dir_y * MOVE_SPEED, -main_data->player.dir_x * MOVE_SPEED);
+}
+
+void move_right(t_main_data *main_data)
+{
+    if (!main_data->move_right) return;
+    try_move(main_data, -main_data->player.dir_y * MOVE_SPEED, main_data->player.dir_x * MOVE_SPEED);
 }
 
 
+void movement(t_main_data *main_data)
+{
+	move_up(main_data);
+	move_down(main_data);
+	move_left(main_data);
+	move_right(main_data);
+	rotate_left(main_data);
+	rotate_right(main_data);
+}
 

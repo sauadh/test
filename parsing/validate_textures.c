@@ -193,3 +193,4 @@ bool validate_textures(char *file_content, t_main_data *main_data)
             printf("[validate_textures] All textures validated successfully!\n");
         return(true);
 }
+

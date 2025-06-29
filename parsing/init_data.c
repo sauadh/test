@@ -27,12 +27,13 @@ bool init_main_data(t_main_data *main_data)
 	main_data->floor.green = -1;
 	main_data->floor.blue = -1;
 	main_data->floor.is_set = false;
+	main_data->floor.in_int = -1;
 	main_data->ceiling.is_set = false;
 	main_data->ceiling.red = -1;
 	main_data->ceiling.green = -1;
 	main_data->ceiling.blue = -1;
+	main_data->ceiling.in_int = -1;
 	init_player(&main_data->player);
-	main_data->direction = 0;
 	main_data->player.pos_x = -1;
 	main_data->player.pos_y = -1;
 	main_data->map_height = 0;

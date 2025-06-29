@@ -6,7 +6,7 @@ int	ft_destroy(t_main_data *main_data)
 	mlx_destroy_window(main_data->mlx, main_data->win);
 	if (main_data->img.image != NULL)
 		mlx_destroy_image(main_data->mlx, main_data->img.image);
-	//check leaks
+	clean_main_data(main_data);
 	exit(0);
 	return (0);
 }

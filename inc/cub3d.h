@@ -30,9 +30,12 @@ char *set_color_value(char *line, int *value, bool is_coma);
 bool validate_colors(char *file_content, t_main_data *main_data);
 bool parse_map(char **map_lines, int j, t_main_data *main_data);
 bool validate_map(t_main_data *main_data);
-void pixel_put(t_main_data *main_data, int x, int y, int color);
 bool find_player(t_main_data *main_data);
 void  init_dir_player(t_main_data *main_data);
+void	exit_err(t_main_data *game, char *line, char *message);
+t_bool	is_wspace(char c);
+void	whitespace_checker(t_main_data *game, char *trimmed);
+void	parse_elements(t_main_data *game, int fd);
 
 int	render(void *param);
 

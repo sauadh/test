@@ -24,49 +24,43 @@ static bool invalid_char(t_main_data *main_data)
 
 static bool store_map(char **map_lines, int j, t_main_data *main_data)
 {
-    int index;
-    index = 0;
-    if(!main_data->map_height || main_data->map_height < 3)
-        return(false);
-    main_data->maplines = malloc((sizeof(char *)) * (main_data->map_height + 1));
-    if(!main_data->maplines)
-        return(false);
-    while(index < main_data->map_height)
+    int i = 0;
+    int len;
+
+    if (!main_data->map_height || main_data->map_height < 3)
+        return false;
+
+    main_data->maplines = malloc(sizeof(char *) * (main_data->map_height + 1));
+    if (!main_data->maplines)
+        return false;
+
+    while (i < main_data->map_height)
     {
-        //main_data->maplines[index] = malloc(sizeof(char) * (main_data->map_width + 2));
-        main_data->maplines[index] = malloc(main_data->map_width + 10); // generous safety margin
-        if (!main_data->maplines[index])
-            return (false);
-        ft_bzero(main_data->maplines[index], main_data->map_width + 10); // zero memory to avoid uninitialized bytes
-        // if(!main_data->maplines[index])
-        //     return(false);
-        // ft_strlcpy(main_data->maplines[index], map_lines[j], main_data->map_width + 1);
-        ft_strlcpy(main_data->maplines[index], map_lines[j], main_data->map_width + 10);
-
-        // while((int)ft_strlen(main_data->maplines[index]) < main_data->map_width) //while((int)ft_strlen(main_data->maplines[index]) < main_data->map_width) 
-        // {
-        //     // dprintf(2, "current line:   %d and len is:  %d\n", index, (int)ft_strlen(main_data->maplines[index]));
-        //     ft_strlcat(main_data->maplines[index], " ", main_data->map_width + 1);
-        // }
-        int len = ft_strlen(main_data->maplines[index]);
-        while (len < main_data->map_width)
+        main_data->maplines[i] = malloc(main_data->map_width + 1);
+        if (!main_data->maplines[i])
         {
-            main_data->maplines[index][len++] = ' ';
+            // Free previously allocated lines
+            while (i-- > 0)
+                free(main_data->maplines[i]);
+            free(main_data->maplines);
+            return false;
         }
-        main_data->maplines[index][len] = '\0'; // ensure null-termination
 
-        index++;
+        ft_bzero(main_data->maplines[i], main_data->map_width + 1);
+        ft_strlcpy(main_data->maplines[i], map_lines[j], main_data->map_width + 1);
+
+        len = ft_strlen(main_data->maplines[i]);
+        while (len < main_data->map_width)
+            main_data->maplines[i][len++] = ' ';
+        main_data->maplines[i][len] = '\0';
+
+        i++;
         j++;
     }
-    main_data->maplines[index] = NULL;
-    index = 0;
-    // while (index < main_data->map_height)
-    // {
-    //     printf(" map: $%s$\n", main_data->maplines[index]);
-    //     index++;
-    // }
-    return(true);
+    main_data->maplines[i] = NULL;
+    return true;
 }
+
 
  static bool get_map_size(char **map_lines, int j, t_main_data *main_data)
 {
@@ -105,7 +99,6 @@ static bool store_map(char **map_lines, int j, t_main_data *main_data)
 
 bool parse_map(char **map_lines, int j, t_main_data *main_data)
 {
-    (void)main_data;
 
     printf("initial j:  %d\n\n\n", j);
     printf("j после того как попала в функцию validate_map: %s\n", map_lines[j]);

@@ -14,8 +14,6 @@ static void	parse_gun_texture(t_main_data *main_data)
 
 bool valid_content(char **file_content, t_main_data *main_data)
 {
-    // (void) main_data;
-    // (void) file_content;
     int index;
     int j;
     size_t i;

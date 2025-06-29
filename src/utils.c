@@ -47,7 +47,7 @@ bool is_empty_line(char *str)
     i = 0;
     n_symb = 0;
     if(!str)
-    return(true);
+        return(true);
     while (str[i] != '\0')
     {
         if(str[i] != '\t' && str[i] != ' ' && str[i] != '\n')
@@ -55,19 +55,22 @@ bool is_empty_line(char *str)
         i++;
     }
     if(n_symb == 0)
-    return(true);
+        return(true);
     return(false);
     
 }
 void clean_main_data(t_main_data *main_data)
 {
     int i;
-
+    
     i = 0;
     while (i < 4)
     {
         if (main_data->textures[i].path)
             free(main_data->textures[i].path);
+        if (main_data->tex[i].img != NULL)
+			mlx_destroy_image(main_data->mlx, main_data->tex[i].img);
+
         i++;
     }
     if (main_data->maplines)
